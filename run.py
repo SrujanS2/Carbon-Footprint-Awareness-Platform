@@ -66,19 +66,20 @@ if __name__ == "__main__":
     # Guard against the most common confusion: an OLD server still holding the
     # port. If we did not catch this, a second 'python run.py' would fail to
     # bind and you would keep talking to the stale server (seeing 404/405s).
-    probe = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    already_running = probe.connect_ex(("127.0.0.1", port)) == 0
-    probe.close()
-    if already_running:
-        print("=" * 64)
-        print("ERROR: port %d is already in use." % port)
-        print("Another server is still running and would keep serving OLD code.")
-        print("Stop it first, then run 'python run.py' again:")
-        print("  PowerShell:  Stop-Process -Name python -Force")
-        print("  (or close the other terminal window running the server)")
-        print("Tip: set a different port with  $env:PORT=5001 ; python run.py")
-        print("=" * 64)
-        sys.exit(1)
+    if os.environ.get("WERKZEUG_RUN_MAIN") != "true":
+        probe = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        already_running = probe.connect_ex(("127.0.0.1", port)) == 0
+        probe.close()
+        if already_running:
+            print("=" * 64)
+            print("ERROR: port %d is already in use." % port)
+            print("Another server is still running and would keep serving OLD code.")
+            print("Stop it first, then run 'python run.py' again:")
+            print("  PowerShell:  Stop-Process -Name python -Force")
+            print("  (or close the other terminal window running the server)")
+            print("Tip: set a different port with  $env:PORT=5001 ; python run.py")
+            print("=" * 64)
+            sys.exit(1)
 
     _print_routes()
     print("Carbon Footprint Assistant running at http://localhost:%d "
