@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description"
+        content="Understand, track and reduce your carbon footprint with an interactive 3D AI assistant and personalised, explainable insights." />
+  <title>Carbon Footprint Assistant</title>
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <!-- Skip link: lets keyboard / screen-reader users jump past the header. -->
+  <a class="skip-link" href="#main">Skip to main content</a>
+
+  <!-- Decorative animated background blobs (hidden from assistive tech). -->
+  <div class="bg-decor" aria-hidden="true">
+    <span class="blob blob-1"></span>
+    <span class="blob blob-2"></span>
+    <span class="blob blob-3"></span>
+  </div>
+
+  <header class="site-header">
+    <div class="container header-inner">
+      <div class="brand">
+        <span class="brand-mark" aria-hidden="true">CO<sub>2</sub></span>
+        <span class="brand-text">Carbon Footprint Assistant</span>
+      </div>
+      <nav aria-label="Primary">
+        <a href="#chat-section">Ask the assistant</a>
+        <a href="#assessment">Measure</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main" class="container">
+
+    <!-- ============================ HERO + 3D BOT ======================== -->
+    <section class="hero" aria-labelledby="hero-heading">
+      <div class="hero-copy">
+        <h1 id="hero-heading">Meet Terra, your carbon coach</h1>
+        <p class="hero-lead">
+          Ask anything about your carbon footprint and get clear, friendly,
+          science-based answers - then measure your own footprint for a
+          personalised action plan.
+        </p>
+        <div class="hero-actions">
+          <a class="btn btn-primary" href="#chat-section">Chat with Terra</a>
+          <a class="btn btn-ghost" href="#assessment">Measure my footprint</a>
+        </div>
+      </div>
+
+      <!-- 3D assistant avatar. Decorative: a text alternative is provided in
+           the chat. WebGL/reduced-motion fallback shown when needed. -->
+      <div class="avatar-stage">
+        <div id="avatar-canvas" class="avatar-canvas" role="img"
+             aria-label="Terra, an animated 3D globe assistant"></div>
+        <div id="avatar-fallback" class="avatar-fallback" aria-hidden="true">
+          <span class="fallback-orb"></span>
+        </div>
+        <p id="avatar-status" class="avatar-status" aria-live="polite">Ready to help</p>
+      </div>
+    </section>
+
+    <!-- ============================== CHAT =============================== -->
+    <section id="chat-section" class="card chat" aria-labelledby="chat-heading">
+      <h2 id="chat-heading">Ask the carbon assistant</h2>
+      <p class="section-intro">
+        Type a question, or tap a suggestion. Answers come from a built-in
+        carbon knowledge base.
+      </p>
+
+      <!-- Conversation transcript: a live log for screen readers. -->
+      <div id="chat-log" class="chat-log" role="log" aria-live="polite"
+           aria-label="Conversation with the carbon assistant"></div>
+
+      <!-- Suggestion chips (populated by JS). -->
+      <div id="chat-suggestions" class="chip-row" aria-label="Suggested topics"></div>
+
+      <form id="chat-form" class="chat-form">
+        <label for="chat-input" class="visually-hidden">
+          Your question about carbon footprints
+        </label>
+        <input type="text" id="chat-input" name="chat-input" autocomplete="off"
+               maxlength="500" placeholder="e.g. How do I reduce my flights?"
+               aria-describedby="chat-help" />
+        <button type="submit" class="btn btn-primary" id="chat-send">
+          Send
+        </button>
+      </form>
+      <p id="chat-help" class="help">
+        Press Enter to send. Terra focuses on carbon and sustainability topics.
+      </p>
+    </section>
+
+    <!-- ============================ ASSESSMENT ========================== -->
+    <section id="assessment" class="card" aria-labelledby="form-heading">
+      <h2 id="form-heading">Measure your footprint</h2>
+      <p class="section-intro">
+        All fields are required. Your data stays in your browser session and is
+        never stored.
+      </p>
+
+      <form id="footprint-form" novalidate>
+        <fieldset>
+          <legend>Travel</legend>
+
+          <div class="field">
+            <label for="weekly_km">Distance travelled per week (km)</label>
+            <input type="number" id="weekly_km" name="weekly_km"
+                   min="0" max="5000" step="1" inputmode="numeric"
+                   required aria-describedby="weekly_km-help" />
+            <p class="help" id="weekly_km-help">
+              Approximate kilometres by your main mode of transport.
+            </p>
+          </div>
+
+          <div class="field">
+            <label for="transport_mode">Main mode of transport</label>
+            <select id="transport_mode" name="transport_mode" required>
+              <option value="" disabled selected>Choose a mode</option>
+              <option value="car_petrol">Petrol / diesel car</option>
+              <option value="car_electric">Electric car</option>
+              <option value="bus">Bus</option>
+              <option value="train">Train</option>
+              <option value="bike_walk">Bicycle / walking</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="flights_per_year">Flights per year (one-way trips)</label>
+            <input type="number" id="flights_per_year" name="flights_per_year"
+                   min="0" max="200" step="1" inputmode="numeric"
+                   required aria-describedby="flights-help" />
+            <p class="help" id="flights-help">
+              Count each take-off. A return trip counts as two.
+            </p>
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend>Food</legend>
+          <div class="field">
+            <label for="diet_type">Typical diet</label>
+            <select id="diet_type" name="diet_type" required>
+              <option value="" disabled selected>Choose a diet</option>
+              <option value="vegan">Vegan</option>
+              <option value="vegetarian">Vegetarian</option>
+              <option value="pescatarian">Pescatarian</option>
+              <option value="omnivore">Omnivore (some meat)</option>
+              <option value="high_meat">High-meat</option>
+            </select>
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend>Home energy</legend>
+
+          <div class="field">
+            <label for="electricity_kwh">Household electricity per month (kWh)</label>
+            <input type="number" id="electricity_kwh" name="electricity_kwh"
+                   min="0" max="5000" step="1" inputmode="numeric"
+                   required aria-describedby="elec-help" />
+            <p class="help" id="elec-help">Check a recent electricity bill.</p>
+          </div>
+
+          <div class="field">
+            <label for="gas_kwh">Household gas per month (kWh)</label>
+            <input type="number" id="gas_kwh" name="gas_kwh"
+                   min="0" max="8000" step="1" inputmode="numeric"
+                   required aria-describedby="gas-help" />
+            <p class="help" id="gas-help">Enter 0 if you have no gas supply.</p>
+          </div>
+
+          <div class="field">
+            <label for="household_size">People in your household</label>
+            <input type="number" id="household_size" name="household_size"
+                   min="1" max="20" step="1" inputmode="numeric"
+                   required value="1" aria-describedby="house-help" />
+            <p class="help" id="house-help">
+              Home energy is shared fairly across everyone who lives with you.
+            </p>
+          </div>
+
+          <div class="field">
+            <label for="region">Region (optional)</label>
+            <input type="text" id="region" name="region" maxlength="60"
+                   autocomplete="off" aria-describedby="region-help" />
+            <p class="help" id="region-help">
+              Used only to label your result; safe to leave blank.
+            </p>
+          </div>
+        </fieldset>
+
+        <div id="form-error" class="form-error" role="alert" hidden
+             tabindex="-1"></div>
+
+        <button type="submit" class="btn btn-primary btn-lg">
+          Get my insights
+        </button>
+      </form>
+    </section>
+
+    <!-- ============================== RESULTS ============================ -->
+    <section id="results" class="card results" aria-labelledby="results-heading"
+             aria-live="polite" hidden>
+      <h2 id="results-heading">Your results</h2>
+
+      <div class="result-hero">
+        <div class="rating-badge" id="rating-badge">
+          <span class="rating-label">Rating</span>
+          <strong id="rating-value"></strong>
+        </div>
+        <div class="totals">
+          <div class="total-box">
+            <span class="total-num" id="per-capita-total"></span>
+            <span class="total-unit">kg CO<sub>2</sub>e / year (you)</span>
+          </div>
+          <div class="total-box">
+            <span class="total-num" id="total-annual"></span>
+            <span class="total-unit">kg CO<sub>2</sub>e / year (household)</span>
+          </div>
+        </div>
+      </div>
+      <p id="rating-explanation" class="rating-explanation"></p>
+
+      <h3>Where your emissions come from</h3>
+      <div id="breakdown-bars" class="breakdown-bars"></div>
+      <table class="breakdown-table">
+        <caption class="visually-hidden">
+          Annual carbon emissions in kilograms of CO2 equivalent by category.
+        </caption>
+        <thead>
+          <tr>
+            <th scope="col">Category</th>
+            <th scope="col">Annual kg CO<sub>2</sub>e</th>
+            <th scope="col">Vs. average</th>
+          </tr>
+        </thead>
+        <tbody id="breakdown-body"></tbody>
+      </table>
+
+      <h3>Your personalised action plan</h3>
+      <p class="section-intro">
+        Ranked by impact. Each suggestion explains why it was chosen.
+      </p>
+      <ol id="insights-list" class="insights"></ol>
+
+      <p class="results-cta">
+        Have a question about any of these?
+        <a href="#chat-section">Ask Terra</a>.
+      </p>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p>
+        Estimates use published average emission factors and are for awareness
+        and guidance only.
+      </p>
+    </div>
+  </footer>
+
+  <!-- Three.js (loaded from cdnjs; see CSP exception). Deferred so it does not
+       block rendering. Our scripts run after it (defer preserves order). -->
+  <script defer
+    src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="js/avatar.js" defer></script>
+  <script src="js/app.js" defer></script>
+</body>
+</html>

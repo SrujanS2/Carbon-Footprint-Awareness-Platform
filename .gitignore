@@ -1,0 +1,52 @@
+# ---------------------------------------------------------------------------
+# Keep the repository strictly under 10 MB: never commit virtualenvs,
+# caches, build artefacts or large binaries.
+# ---------------------------------------------------------------------------
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+dist/
+*.egg-info/
+.eggs/
+
+# Virtual environments
+.venv/
+venv/
+env/
+ENV/
+
+# Test / coverage artefacts
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+coverage.xml
+.tox/
+
+# Node (only if a JS toolchain is added later)
+node_modules/
+
+# Trained model binaries (regenerated at runtime — never bloat the repo)
+*.pkl
+*.joblib
+*.model
+
+# Secrets / environment
+.env
+.env.*
+!.env.example
+*.key
+*.pem
+secrets.json
+
+# Editor / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+*.swp
