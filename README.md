@@ -273,5 +273,30 @@ works on Heroku.
 
 ---
 
+## Credits & Data Sources
+
+All application code (backend, frontend, AI logic, and tests) was written
+originally for this project. The following third-party resources are used with
+attribution:
+
+- **Training data:** *Personal Carbon Footprint Behavior Dataset* by
+  **sonalshinde123**, via Kaggle
+  (`kaggle.com/datasets/sonalshinde123/personal-carbon-footprint-behavior-dataset`).
+  Used to train the Random Forest impact-rating model. All credit for the
+  dataset belongs to its original author.
+- **Emission factors** in `carbon_calculator.py` are rounded mid-range values
+  derived from publicly available life-cycle datasets, primarily the UK
+  Government **DEFRA / BEIS Greenhouse Gas Conversion Factors** and **IPCC**
+  guidance. They are approximations for awareness, not certified figures.
+- **Open-source libraries:** Flask, scikit-learn, NumPy, python-dotenv
+  (backend) and Three.js (3D avatar, loaded from cdnjs). These remain the
+  property of their respective maintainers under their open-source licences.
+
+No code, text, or assets were copied from existing carbon-footprint
+applications; any resemblance in boilerplate (e.g. a Flask app factory or a
+Three.js scene setup) reflects standard, widely used patterns.
+
+---
+
 *Estimates are for awareness and guidance only and should not be treated as a
 certified carbon audit.*

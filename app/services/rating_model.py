@@ -5,6 +5,10 @@ Trains a scikit-learn Random Forest on the real
 ``carbon_impact_level`` (Low / Medium / High) from their daily behaviour, then
 uses it to rate a user's lifestyle in the app.
 
+Dataset credit: "Personal Carbon Footprint Behavior Dataset" by sonalshinde123
+(Kaggle). The dataset is the property of its original author and is used here
+with attribution; see the README "Credits & Data Sources" section.
+
 Design:
 * The dataset is loaded with the standard-library ``csv`` module (no pandas
   dependency, keeping the build small).
